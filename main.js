@@ -7,6 +7,8 @@ const { spawn, execFileSync } = require("child_process");
 const net = require("net");
 const http = require("http");
 const path = require("path");
+const fs = require("fs");
+const os = require("os");
 
 let serverProc = null;
 let mainWindow = null;
@@ -15,10 +17,29 @@ let serverPort = null;
 const STARTUP_TIMEOUT_MS = 30000;
 const POLL_INTERVAL_MS = 300;
 
+// ---------------- 文件日志 (诊断启动问题) ----------------
+// 写到 %APPDATA%\Mole\mole-main.log，GUI 程序看不到控制台时靠它排查。
+let _logFile = null;
+function _logPath() {
+    try { return path.join(app.getPath("userData"), "mole-main.log"); }
+    catch (e) { return path.join(os.tmpdir(), "mole-main.log"); }
+}
+function log(...args) {
+    const line = `[${new Date().toISOString()}] ${args.join(" ")}`;
+    try { console.log(line); } catch (e) {}
+    try {
+        if (!_logFile) {
+            _logFile = _logPath();
+            fs.mkdirSync(path.dirname(_logFile), { recursive: true });  // userData 目录可能尚未创建
+        }
+        fs.appendFileSync(_logFile, line + "\n");
+    } catch (e) {}
+}
+process.on("uncaughtException", (e) => log("UNCAUGHT", e && e.stack ? e.stack : String(e)));
+
 // ---------------- 管理员守卫 ----------------
 function isAdmin() {
     try {
-        // net session 仅管理员可成功
         execFileSync("net", ["session"], { stdio: "ignore" });
         return true;
     } catch (e) {
@@ -26,20 +47,21 @@ function isAdmin() {
     }
 }
 
-// 非管理员且为打包态 → 以管理员重启自身后退出
-function ensureAdminOrRelaunch() {
-    if (!app.isPackaged) return true;          // dev 模式不强制提权
-    if (isAdmin()) return true;
+// 按需提权：以管理员身份重启自身（由 UI「以管理员重启」按钮触发）。
+// 注意：不在启动时强制调用——应用始终以普通权限直接打开，保证「永远能开」。
+function relaunchAsAdmin() {
+    log("user requested relaunch as admin");
     try {
         spawn("powershell.exe",
             ["-NoProfile", "-Command",
              `Start-Process -FilePath '${process.execPath}' -Verb RunAs`],
             { detached: true, stdio: "ignore", windowsHide: true }).unref();
+        app.quit();
+        return true;
     } catch (e) {
-        console.error("relaunch as admin failed:", e);
+        log("relaunch as admin failed:", String(e));
+        return false;
     }
-    app.quit();
-    return false;
 }
 
 // ---------------- 空闲端口 ----------------
@@ -66,15 +88,18 @@ function startServer(port) {
     const exe = serverExePath();
     const opts = { stdio: ["ignore", "pipe", "pipe"], windowsHide: true };
     if (exe) {
+        log(`startServer exe=${exe} exists=${fs.existsSync(exe)} port=${port}`);
         serverProc = spawn(exe, ["--port", String(port)], opts);
     } else {
         const script = path.join(__dirname, "python", "server.py");
         const py = process.platform === "win32" ? "python" : "python3";
+        log(`startServer (dev) py=${py} script=${script} port=${port}`);
         serverProc = spawn(py, [script, "--port", String(port)], opts);
     }
-    serverProc.stdout.on("data", d => console.log(`[server] ${d.toString().trim()}`));
-    serverProc.stderr.on("data", d => console.log(`[server] ${d.toString().trim()}`));
-    serverProc.on("exit", code => { console.log(`[server] exited ${code}`); serverProc = null; });
+    serverProc.on("error", e => log("server spawn error:", String(e)));
+    serverProc.stdout.on("data", d => log(`[server] ${d.toString().trim()}`));
+    serverProc.stderr.on("data", d => log(`[server] ${d.toString().trim()}`));
+    serverProc.on("exit", code => { log(`[server] exited ${code}`); serverProc = null; });
 }
 
 function waitForServer(port) {
@@ -132,21 +157,28 @@ function createMainWindow(port) {
 async function launch() {
     try {
         serverPort = await getFreePort();
-        console.log("port:", serverPort);
+        log("got free port:", serverPort);
         startServer(serverPort);
+        log("waiting for server ready...");
         await waitForServer(serverPort);
-        console.log("server ready");
+        log("server ready, creating window");
         createMainWindow(serverPort);
+        log("window created");
 
         if (app.isPackaged) {
             try {
                 const { initUpdater, checkForUpdates } = require("./updater");
                 initUpdater(() => mainWindow);
                 setTimeout(() => checkForUpdates(), 5000);
-            } catch (e) { console.error("updater init:", e.message); }
+            } catch (e) { log("updater init failed:", e.message); }
         }
     } catch (err) {
-        console.error("launch failed:", err);
+        log("launch FAILED:", err && err.stack ? err.stack : String(err));
+        // 启动失败时弹个原生错误框, 别让用户以为"点了没反应"
+        try {
+            const { dialog } = require("electron");
+            dialog.showErrorBox("Mole 启动失败", String(err) + "\n\n日志: " + _logPath());
+        } catch (e) {}
         app.quit();
     }
 }
@@ -156,9 +188,12 @@ function setupIPC() {
     ipcMain.handle("app:version", () => app.getVersion());
     ipcMain.handle("app:isAdmin", () => isAdmin());
     ipcMain.handle("app:quit", () => app.quit());
+    ipcMain.handle("app:restartAsAdmin", () => relaunchAsAdmin());
 }
 
 // ---------------- 生命周期 ----------------
+// 始终以普通权限直接打开窗口（保证「永远能开」）。
+// 需要管理员的操作按需提权：卸载用 ShellExecute runas；优化页提供「以管理员重启」按钮。
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
     app.quit();
@@ -168,7 +203,7 @@ if (!gotLock) {
     });
 
     app.whenReady().then(() => {
-        if (!ensureAdminOrRelaunch()) return;
+        log(`whenReady packaged=${app.isPackaged} admin=${isAdmin()}`);
         setupIPC();
         launch();
     });

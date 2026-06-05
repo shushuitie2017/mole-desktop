@@ -7,6 +7,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     getVersion: () => ipcRenderer.invoke("app:version"),
     isAdmin: () => ipcRenderer.invoke("app:isAdmin"),
     quit: () => ipcRenderer.invoke("app:quit"),
+    restartAsAdmin: () => ipcRenderer.invoke("app:restartAsAdmin"),
     // 自动更新事件
     onUpdateAvailable: (cb) => ipcRenderer.on("update:available", (_, d) => cb(d)),
     onUpdateProgress: (cb) => ipcRenderer.on("update:progress", (_, d) => cb(d)),

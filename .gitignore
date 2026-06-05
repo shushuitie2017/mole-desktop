@@ -14,3 +14,4 @@ servers.json
 
 # 内部实装文档(含本机路径), 不入开源仓库
 docs/
+python/pkg/

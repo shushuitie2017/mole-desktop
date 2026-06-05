@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PY_DIR = ROOT / "python"
-DIST = PY_DIR / "dist"
+DIST = PY_DIR / "pkg"              # 输出根目录 (避开易被 Defender/句柄锁住的 dist 名)
 BUILD = PY_DIR / "build"
 OUT_DIR = DIST / "server"          # PyInstaller --onedir 输出目录
 OUT_EXE = OUT_DIR / "server.exe"
@@ -41,6 +41,7 @@ def build():
     cmd = [
         sys.executable, "-m", "PyInstaller",
         "--onedir", "--name", "server", "--noconfirm", "--clean",
+        "--distpath", str(DIST), "--workpath", str(BUILD),
         "--add-data", f"templates{sep}templates",
         "--add-data", f"static{sep}static",
         "--hidden-import", "psutil",
