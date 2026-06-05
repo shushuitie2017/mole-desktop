@@ -11,3 +11,6 @@ _进度交接.md
 server.log
 electron-dev.log
 servers.json
+
+# 内部实装文档(含本机路径), 不入开源仓库
+docs/
