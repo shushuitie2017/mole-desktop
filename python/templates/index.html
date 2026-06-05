@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mole · Web Console</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <span class="logo">🦫</span>
+            <div>
+                <h1>Mole <span class="sub">Web</span></h1>
+                <p class="tag" data-i18n="tagline">Windows 维护可视化控制台</p>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <span class="version" id="version"></span>
+            <div class="lang-switch" id="langSwitch">
+                <button data-lang="zh" class="active">中</button>
+                <button data-lang="en">EN</button>
+                <button data-lang="ja">日</button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="tabs" id="tabs">
+        <button class="tab active" data-view="clean"   data-i18n="tab_clean">清理</button>
+        <button class="tab"        data-view="purge"   data-i18n="tab_purge">项目产物</button>
+        <button class="tab"        data-view="status"  data-i18n="tab_status">系统监控</button>
+        <button class="tab"        data-view="analyze" data-i18n="tab_analyze">磁盘浏览</button>
+        <button class="tab"        data-view="optimize" data-i18n="tab_optimize">系统优化</button>
+        <button class="tab"        data-view="uninstall" data-i18n="tab_uninstall">应用卸载</button>
+    </nav>
+
+    <main id="views">
+        <section class="view active" id="view-clean"></section>
+        <section class="view" id="view-purge"></section>
+        <section class="view" id="view-status"></section>
+        <section class="view" id="view-analyze"></section>
+        <section class="view" id="view-optimize"></section>
+        <section class="view" id="view-uninstall"></section>
+    </main>
+
+    <footer class="footer">
+        <span data-i18n="footerNote">基于 tw93/Mole (windows 分支) · 仅本机回环 127.0.0.1:5005</span>
+    </footer>
+
+    <script src="/static/core.js"></script>
+    <script src="/static/clean.js"></script>
+    <script src="/static/purge.js"></script>
+    <script src="/static/status.js"></script>
+    <script src="/static/analyze.js"></script>
+    <script src="/static/optimize.js"></script>
+    <script src="/static/uninstall.js"></script>
+    <script>MOLE.start();</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+python/dist/
+python/build/
+python/*.spec
+__pycache__/
+*.log
+
+# 内部工作文档
+_进度交接.md
+server.log
+electron-dev.log
