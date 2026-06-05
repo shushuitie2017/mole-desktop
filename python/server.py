@@ -50,7 +50,7 @@ app = Flask(__name__,
             template_folder=os.path.join(_BASE, "templates"),
             static_folder=os.path.join(_BASE, "static"))
 
-APP_VERSION = "1.0.1"
+APP_VERSION = "1.0.2"
 PORT = 5005
 
 # ============================================================================
