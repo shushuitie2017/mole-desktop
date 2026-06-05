@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mole — Windows 一体化清理与维护工具</title>
+<meta name="description" content="Mole 是一款 Windows 一体化系统维护桌面应用：深度清理、项目产物清理、实时监控、磁盘浏览、系统优化、应用卸载，六合一。下载安装即用，无需任何依赖。">
+<style>
+:root{
+  --bg:#0d1117;--bg2:#161b22;--card:#1b222c;--border:#2a323d;--bd2:#232b35;
+  --tx:#e6edf3;--dim:#8b949e;--faint:#6e7681;
+  --acc:#f0883e;--acc2:#db6d28;--grn:#3fb950;--red:#f85149;--blue:#58a6ff;--pur:#bc8cff;
+  --mono:"Cascadia Code","JetBrains Mono",Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,"Segoe UI","Microsoft YaHei",system-ui,sans-serif;line-height:1.7;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.mono{font-family:var(--mono)}
+.acc{color:var(--acc)}
+
+/* glow bg */
+body::before{content:"";position:fixed;top:-30%;left:50%;transform:translateX(-50%);width:900px;height:600px;
+  background:radial-gradient(ellipse,rgba(240,136,62,.10),transparent 70%);pointer-events:none;z-index:0}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);background:rgba(13,17,23,.8);border-bottom:1px solid var(--border)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}
+.logo .mk{width:30px;height:30px;border-radius:8px;background:var(--bg);border:2px solid var(--acc);display:grid;place-items:center;color:var(--acc);font-family:var(--mono);font-weight:800}
+.navlinks{display:flex;align-items:center;gap:22px;font-size:14px;color:var(--dim)}
+.navlinks a:hover{color:var(--tx)}
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:9px;padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer;transition:.15s}
+.btn-primary{background:var(--acc);color:#1b1300}
+.btn-primary:hover{background:#ffa657;transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--tx)}
+.btn-ghost:hover{border-color:var(--acc);color:var(--acc)}
+.btn.lg{padding:15px 30px;font-size:16px;border-radius:11px}
+
+section{position:relative;z-index:1}
+
+/* hero */
+.hero{text-align:center;padding:70px 0 40px}
+.pill{display:inline-block;font-family:var(--mono);font-size:12px;color:var(--acc);border:1px solid var(--acc2);border-radius:30px;padding:5px 14px;margin-bottom:22px;background:rgba(240,136,62,.07)}
+.hero h1{font-size:54px;font-weight:850;letter-spacing:-.5px;line-height:1.1;margin-bottom:18px}
+.hero h1 .grad{background:linear-gradient(120deg,var(--acc),#ffb37a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{font-size:19px;color:var(--dim);max-width:680px;margin:0 auto 32px}
+.cta{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap}
+.cta .meta{font-size:12.5px;color:var(--faint);font-family:var(--mono)}
+.hero-shot{margin:48px auto 0;max-width:1000px;border-radius:14px;border:1px solid var(--border);box-shadow:0 30px 80px -20px rgba(0,0,0,.7),0 0 0 1px rgba(240,136,62,.08);overflow:hidden;display:block}
+.hero-shot img{display:block;width:100%}
+
+/* stats band */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:64px 0}
+.stats .s{background:var(--bg2);padding:26px 20px;text-align:center}
+.stats .v{font-family:var(--mono);font-size:32px;font-weight:850;color:var(--acc)}
+.stats .l{color:var(--dim);font-size:13px;margin-top:4px}
+
+/* section head */
+.sh{text-align:center;margin:0 auto 44px;max-width:680px}
+.sh .ey{font-family:var(--mono);font-size:12px;letter-spacing:3px;color:var(--acc);text-transform:uppercase}
+.sh h2{font-size:34px;font-weight:800;margin:10px 0 8px;letter-spacing:-.3px}
+.sh p{color:var(--dim);font-size:16px}
+
+.block{padding:70px 0;border-top:1px solid var(--bd2)}
+
+/* modules grid */
+.mods{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mod{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;transition:.18s}
+.mod:hover{border-color:var(--acc2);transform:translateY(-3px)}
+.mod .ic{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;font-size:22px;margin-bottom:14px;background:rgba(240,136,62,.1);border:1px solid rgba(240,136,62,.25)}
+.mod h3{font-size:17px;font-weight:700;margin-bottom:6px}
+.mod p{color:var(--dim);font-size:13.5px}
+.mod .tag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:10px}
+
+/* advantages */
+.adv{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.adv .a{display:flex;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px}
+.adv .a .n{font-family:var(--mono);font-size:13px;color:var(--acc);font-weight:800;flex-shrink:0;width:34px;height:34px;border-radius:9px;border:1px solid var(--acc2);display:grid;place-items:center;background:rgba(240,136,62,.08)}
+.adv .a h3{font-size:16.5px;font-weight:700;margin-bottom:5px}
+.adv .a p{color:var(--dim);font-size:13.5px}
+
+/* showcase */
+.showcase{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.showcase img{width:100%;border-radius:12px;border:1px solid var(--border);box-shadow:0 20px 50px -20px rgba(0,0,0,.6)}
+.showcase h2{font-size:30px;font-weight:800;margin-bottom:16px;letter-spacing:-.3px}
+.showcase ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.showcase li{display:flex;gap:11px;color:var(--dim);font-size:15px}
+.showcase li::before{content:"▸";color:var(--acc);font-weight:800}
+.showcase li b{color:var(--tx)}
+
+/* safety callout */
+.safety{background:linear-gradient(135deg,rgba(63,185,80,.06),rgba(88,166,255,.04));border:1px solid rgba(63,185,80,.25);border-radius:16px;padding:34px 38px;display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.safety .big{font-size:46px}
+.safety h3{font-size:22px;font-weight:800;margin-bottom:6px}
+.safety p{color:var(--dim);font-size:14.5px;max-width:720px}
+
+/* download */
+.dl{text-align:center;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:54px 30px}
+.dl h2{font-size:34px;font-weight:850;margin-bottom:10px}
+.dl p{color:var(--dim);font-size:16px;margin-bottom:26px}
+.dlmeta{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;margin-top:26px;font-family:var(--mono);font-size:13px;color:var(--faint)}
+.dlmeta b{color:var(--dim)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:38px;text-align:left}
+.steps .st{background:var(--bg2);border:1px solid var(--bd2);border-radius:12px;padding:18px}
+.steps .st .num{font-family:var(--mono);color:var(--acc);font-weight:800;font-size:13px}
+.steps .st h4{font-size:15px;margin:6px 0 4px}
+.steps .st p{font-size:13px;color:var(--dim);margin:0}
+
+footer{border-top:1px solid var(--border);padding:34px 0;color:var(--faint);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+footer a{color:var(--dim)}footer a:hover{color:var(--acc)}
+
+@media(max-width:860px){
+  .hero h1{font-size:38px}.stats{grid-template-columns:repeat(2,1fr)}
+  .mods,.steps{grid-template-columns:1fr}.adv{grid-template-columns:1fr}
+  .showcase{grid-template-columns:1fr}.navlinks a:not(.dlbtn){display:none}
+}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="logo" href="#"><span class="mk">M</span> Mole</a>
+  <div class="navlinks">
+    <a href="#modules">功能</a>
+    <a href="#why">优势</a>
+    <a href="https://github.com/shushuitie2017/mole-desktop" target="_blank">GitHub</a>
+    <a class="btn btn-primary dlbtn" href="#download">下载</a>
+  </div>
+</div></nav>
+
+<!-- HERO -->
+<section class="hero"><div class="wrap">
+  <span class="pill">Windows 10 / 11 · 一体化系统维护</span>
+  <h1>一个 Mole，<span class="grad">六合一</span><br>清理 · 监控 · 优化你的 Windows</h1>
+  <p class="sub">CCleaner、WinDirStat、IObit Uninstaller、任务管理器——四个工具的活，一个 Mole 全包。下载安装即用，<b style="color:var(--tx)">无需安装任何依赖环境</b>。</p>
+  <div class="cta">
+    <a class="btn btn-primary lg" href="#download">⬇ 免费下载 Windows 版</a>
+    <a class="btn btn-ghost lg" href="https://github.com/shushuitie2017/mole-desktop" target="_blank">★ GitHub 开源</a>
+  </div>
+  <div class="cta" style="margin-top:14px"><span class="meta">v1.0.0 · 94 MB · Windows 10/11 64 位 · 免费开源</span></div>
+  <a class="hero-shot" href="#download"><img src="assets/shot-clean.png" alt="Mole 深度清理界面"></a>
+</div></section>
+
+<div class="wrap">
+  <!-- STATS -->
+  <div class="stats">
+    <div class="s"><div class="v">6 合 1</div><div class="l">清理·产物·监控·磁盘·优化·卸载</div></div>
+    <div class="s"><div class="v">0 依赖</div><div class="l">下载安装即用，无需 Python</div></div>
+    <div class="s"><div class="v">12.9 GB</div><div class="l">单机实测可回收缓存</div></div>
+    <div class="s"><div class="v">3 语言</div><div class="l">中文 / English / 日本語</div></div>
+  </div>
+</div>
+
+<!-- MODULES -->
+<section class="block" id="modules"><div class="wrap">
+  <div class="sh"><div class="ey">All-in-one</div><h2>六大功能，一个界面</h2><p>从日常清理到深度维护，覆盖 Windows 维护的方方面面。</p></div>
+  <div class="mods">
+    <div class="mod"><div class="ic">🧹</div><h3>深度清理</h3><p>用户/浏览器/GPU/应用/开发者/残留缓存，46 个类别一键扫描回收，删除前可预览。</p><div class="tag">temp · cache · 缩略图 · 崩溃转储</div></div>
+    <div class="mod"><div class="ic">📦</div><h3>项目产物清理</h3><p>一键清理 node_modules / target / dist / .next 等构建产物，按项目分组，开发者实测可回收 20GB+。</p><div class="tag">node · rust · python · java</div></div>
+    <div class="mod"><div class="ic">📊</div><h3>实时系统监控</h3><p>CPU 逐核、内存、磁盘、网络速率、Top 进程，附健康评分，2 秒刷新。</p><div class="tag">CPU · RAM · Disk · Net</div></div>
+    <div class="mod"><div class="ic">🗂️</div><h3>磁盘空间浏览</h3><p>目录逐层钻取，大小条形可视化，快速定位"谁占了我的硬盘"，可直接删除。</p><div class="tag">treemap · 大文件定位</div></div>
+    <div class="mod"><div class="ic">⚡</div><h3>系统优化与修复</h3><p>刷新 DNS、重建图标缓存、重置 Winsock/商店、磁盘健康检查、sfc 修复，按需执行。</p><div class="tag">DNS · 缓存 · 服务修复</div></div>
+    <div class="mod"><div class="ic">🗑️</div><h3>应用卸载</h3><p>列出已装应用（含大小/发行商），过滤系统组件，一键调用原生卸载器彻底清除。</p><div class="tag">注册表 · UWP · 残留</div></div>
+  </div>
+</div></section>
+
+<!-- WHY / ADVANTAGES -->
+<section class="block" id="why"><div class="wrap">
+  <div class="sh"><div class="ey">Why Mole</div><h2>为什么选 Mole</h2><p>不只是又一个清理工具——更安全、更省心、更专业。</p></div>
+  <div class="adv">
+    <div class="a"><div class="n">01</div><div><h3>下载即用，零依赖</h3><p>Python 运行时已内置进程序，下载安装包双击即用，无需配置任何环境，普通用户也能轻松上手。</p></div></div>
+    <div class="a"><div class="n">02</div><div><h3>安全护栏，绝不误删</h3><p>内置受保护路径白名单 + 文件年龄阈值，删除前默认"仅预览"，永不触碰 Windows / System32 / 系统关键目录。</p></div></div>
+    <div class="a"><div class="n">03</div><div><h3>开发者友好</h3><p>一键清空堆积的 node_modules、构建产物与 npm/pip/cargo/go 缓存，把几十 GB 硬盘空间还给你。</p></div></div>
+    <div class="a"><div class="n">04</div><div><h3>专业级实时监控</h3><p>不止清理——CPU 逐核负载、内存/磁盘/网络、进程占用、系统健康评分一屏掌握。</p></div></div>
+    <div class="a"><div class="n">05</div><div><h3>三语界面 · 暗色专业 UI</h3><p>中文 / English / 日本語 一键切换，trading-terminal 暗色设计，长时间使用不刺眼。</p></div></div>
+    <div class="a"><div class="n">06</div><div><h3>开源 · 自动更新</h3><p>代码开源可审计，启动管理员权限解锁全功能，内置自动更新，永远用上最新版本。</p></div></div>
+  </div>
+</div></section>
+
+<!-- SHOWCASE -->
+<section class="block"><div class="wrap">
+  <div class="showcase">
+    <img src="assets/shot-status.png" alt="Mole 实时系统监控仪表盘">
+    <div>
+      <h2>一屏看懂电脑状态</h2>
+      <ul>
+        <li><b>健康评分</b>：综合 CPU/内存/磁盘/温度给出 0–100 分</li>
+        <li><b>逐核 CPU</b>：每个核心负载实时可视化</li>
+        <li><b>内存 / 磁盘 / 网络</b>：用量、读写、上下行速率</li>
+        <li><b>Top 进程</b>：揪出谁在吃 CPU 和内存</li>
+        <li><b>2 秒刷新</b>：真正的实时，不是快照</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- SAFETY -->
+<section class="block"><div class="wrap">
+  <div class="safety">
+    <div class="big">🛡️</div>
+    <div>
+      <h3>安全是第一原则</h3>
+      <p>每一次删除都经过<b style="color:var(--tx)">受保护路径校验</b>与<b style="color:var(--tx)">年龄阈值过滤</b>，系统目录（Windows、System32、Program Files、Defender）永远在白名单之外。所有破坏性操作默认<b style="color:var(--tx)">"仅预览"</b>，你看清要删什么、能回收多少，确认后才真正执行。</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- DOWNLOAD -->
+<section class="block" id="download"><div class="wrap">
+  <div class="dl">
+    <h2>立即下载 Mole</h2>
+    <p>免费 · 开源 · 适用于 Windows 10 / 11（64 位）</p>
+    <a class="btn btn-primary lg" href="/downloads/Mole-Setup-1.0.0.exe">⬇ 下载 Mole Setup v1.0.0（94 MB）</a>
+    <div class="dlmeta">
+      <span><b>版本</b> v1.0.0</span>
+      <span><b>大小</b> 94 MB</span>
+      <span><b>系统</b> Windows 10/11 x64</span>
+      <span><b>授权</b> MIT 开源</span>
+      <span><a href="https://github.com/shushuitie2017/mole-desktop" target="_blank" style="color:var(--acc)">GitHub 源码 ↗</a></span>
+    </div>
+    <div class="steps">
+      <div class="st"><div class="num">STEP 1</div><h4>下载并安装</h4><p>双击安装包，可自选安装目录，一路下一步。</p></div>
+      <div class="st"><div class="num">STEP 2</div><h4>授权管理员</h4><p>首次启动点击 UAC「是」，解锁全部维护功能。</p></div>
+      <div class="st"><div class="num">STEP 3</div><h4>开始清理</h4><p>先扫描预览可回收空间，确认后一键清理。</p></div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <span>© 2026 Mole · Windows 一体化维护工具 · MIT License</span>
+  <span><a href="https://github.com/shushuitie2017/mole-desktop" target="_blank">GitHub</a> &nbsp;·&nbsp; <a href="#download">下载</a> &nbsp;·&nbsp; mole.bluecatbot.com</span>
+</div></footer>
+
+</body>
+</html>
