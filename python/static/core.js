@@ -122,6 +122,22 @@ const MOLE = {
             this.$("version").textContent = "v" + v.version;
         } catch (e) {}
 
+        // 更新相关文案
+        this.addStrings({
+            zh: { upd_check: "检查更新", upd_checking: "检查中…", upd_latest: "已是最新版本",
+                  upd_found: "发现新版本", upd_download: "下载更新", upd_downloading: "下载中",
+                  upd_downloaded: "下载完成，点击重启安装", upd_restart: "重启安装",
+                  upd_error: "检查失败", upd_dev: "开发模式不检查更新" },
+            en: { upd_check: "Check update", upd_checking: "Checking…", upd_latest: "Up to date",
+                  upd_found: "Update available", upd_download: "Download", upd_downloading: "Downloading",
+                  upd_downloaded: "Downloaded — click to restart & install", upd_restart: "Restart & install",
+                  upd_error: "Check failed", upd_dev: "Dev mode (no update check)" },
+            ja: { upd_check: "更新確認", upd_checking: "確認中…", upd_latest: "最新です",
+                  upd_found: "新バージョンあり", upd_download: "ダウンロード", upd_downloading: "ダウンロード中",
+                  upd_downloaded: "完了。クリックで再起動してインストール", upd_restart: "再起動して更新",
+                  upd_error: "確認失敗", upd_dev: "開発モード" },
+        });
+
         // 事件
         this.$("tabs").addEventListener("click", e => {
             const b = e.target.closest(".tab");
@@ -132,8 +148,63 @@ const MOLE = {
             if (b) this.setLang(b.dataset.lang);
         });
 
+        this.setupUpdates();
+
         // 默认视图
         this.switchTo("clean");
+    },
+
+    // ---- 更新检查 UI (仅 Electron 桌面版有 electronAPI) ----
+    setupUpdates() {
+        const A = window.electronAPI;
+        if (!A || !A.checkForUpdate) return;   // 纯 web 版无此能力, 不显示按钮
+
+        const right = document.querySelector(".topbar-right");
+        const btn = document.createElement("button");
+        btn.id = "checkUpdate";
+        btn.className = "upd-btn";
+        btn.setAttribute("data-i18n", "upd_check");
+        btn.textContent = this.t("upd_check");
+        right.insertBefore(btn, this.$("langSwitch"));
+
+        const toast = document.createElement("div");
+        toast.id = "updToast";
+        toast.className = "upd-toast";
+        document.body.appendChild(toast);
+
+        const reset = () => { btn.disabled = false; btn.textContent = MOLE.t("upd_check"); };
+        const msg = (text, ms) => {
+            toast.innerHTML = `<span>${MOLE.escapeHtml(text)}</span>`;
+            toast.classList.add("show");
+            if (ms) setTimeout(() => toast.classList.remove("show"), ms);
+        };
+
+        btn.addEventListener("click", async () => {
+            btn.disabled = true; btn.textContent = MOLE.t("upd_checking");
+            msg(MOLE.t("upd_checking"));
+            let r;
+            try { r = await A.checkForUpdate(); } catch (e) { r = { ok: false, error: String(e) }; }
+            if (r && r.dev) { msg(MOLE.t("upd_dev"), 3000); reset(); }
+            else if (r && r.ok === false) { msg(MOLE.t("upd_error") + (r.error ? ": " + r.error : ""), 6000); reset(); }
+            // r.ok === true → 由 update:available / update:none 事件接管
+        });
+
+        A.onUpdateNone(() => { msg(MOLE.t("upd_latest"), 4000); reset(); });
+        A.onUpdateError(d => { msg(MOLE.t("upd_error") + (d && d.msg ? ": " + d.msg : ""), 6000); reset(); });
+        A.onUpdateAvailable(d => {
+            reset();
+            toast.innerHTML = `<span>${MOLE.t("upd_found")} v${MOLE.escapeHtml(d.version)}</span>` +
+                `<button class="upd-act" id="updDl">${MOLE.t("upd_download")}</button>`;
+            toast.classList.add("show");
+            toast.querySelector("#updDl").addEventListener("click", () => { A.downloadUpdate(); msg(MOLE.t("upd_downloading") + " 0%"); });
+        });
+        A.onUpdateProgress(d => { msg(MOLE.t("upd_downloading") + " " + Math.round(d.percent || 0) + "%"); });
+        A.onUpdateDownloaded(d => {
+            toast.innerHTML = `<span>v${MOLE.escapeHtml(d.version)} ${MOLE.t("upd_downloaded")}</span>` +
+                `<button class="upd-act" id="updInst">${MOLE.t("upd_restart")}</button>`;
+            toast.classList.add("show");
+            toast.querySelector("#updInst").addEventListener("click", () => A.installUpdate());
+        });
     },
 };
 

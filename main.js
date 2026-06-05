@@ -169,7 +169,7 @@ async function launch() {
             try {
                 const { initUpdater, checkForUpdates } = require("./updater");
                 initUpdater(() => mainWindow);
-                setTimeout(() => checkForUpdates(), 5000);
+                setTimeout(() => checkForUpdates(), 5000);  // 启动后台静默检查
             } catch (e) { log("updater init failed:", e.message); }
         }
     } catch (err) {
@@ -189,6 +189,11 @@ function setupIPC() {
     ipcMain.handle("app:isAdmin", () => isAdmin());
     ipcMain.handle("app:quit", () => app.quit());
     ipcMain.handle("app:restartAsAdmin", () => relaunchAsAdmin());
+    // 更新 IPC 始终注册（dev 下点按钮也有响应）
+    try {
+        const { setupUpdateIpc } = require("./updater");
+        setupUpdateIpc(() => mainWindow);
+    } catch (e) { log("setupUpdateIpc failed:", e.message); }
 }
 
 // ---------------- 生命周期 ----------------
