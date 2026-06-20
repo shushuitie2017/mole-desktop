@@ -1,0 +1,40 @@
+<!-- ============================================================
+  门户卡片模板（bluecatbot.com / website-main/index.html）
+  用法：把【卡片块】粘到 index.html 的 .grid 末尾（最后一张卡片 </a> 之后、</div> 之前）；
+       把【i18n 三行】分别加到 <script> 里 i18n 的 zh / en / ja 三个字典中。
+  占位符：<sub> 子域名前缀 · <Name> 卡片标题 · <key> i18n键(小写无空格) · <TAG> 标签 · <ICON> HTML实体码
+  可用 <TAG>：tool ai trade data app video admin game   （对应 .tag-* 颜色）
+  常用 <ICON>：🔍&#128269; 🛠&#128296; 📊&#128202; 🤖&#129302; 📥&#11015; 📚&#128218; 🔒&#128274; ✍&#9997;
+  注意：只动 .grid 与 i18n，不要碰 <head>（门户 SEO 已完整）。
+  校验：grep -c "<key>" index.html 应 = 4（卡片 data-i18n + 三语）。
+============================================================ -->
+
+<!-- ① 卡片块（加到 .grid 末尾） -->
+  <a class="card" href="https://<sub>.bluecatbot.com" target="_blank">
+    <span class="card-tag tag-<TAG>" data-i18n-tag="<TAG>">工具</span>
+    <span class="card-icon">&#<ICON>;</span>
+    <div class="card-title"><Name></div>
+    <div class="card-desc" data-i18n="<key>"><中文一句话描述（与下面 zh 值一致）></div>
+    <div class="card-url"><sub>.bluecatbot.com</div>
+  </a>
+
+<!-- ② i18n：在 zh 字典加 -->
+    <key>: '<中文一句话描述>',
+<!-- ②' 在 en 字典加 -->
+    <key>: '<English one-line description>',
+<!-- ②'' 在 ja 字典加 -->
+    <key>: '<日本語の一文説明>',
+
+<!-- 示例（seo.bluecatbot.com，已上线）：
+  卡片:
+  <a class="card" href="https://seo.bluecatbot.com" target="_blank">
+    <span class="card-tag tag-tool" data-i18n-tag="tool">工具</span>
+    <span class="card-icon">&#128269;</span>
+    <div class="card-title">SEO 体检</div>
+    <div class="card-desc" data-i18n="seoaudit">在线网站 SEO 缺失分析 — 粘贴网址秒查标题/描述/Open Graph/hreflang/robots/sitemap/favicon 等检查项，逐项给出问题与可粘贴的修复片段</div>
+    <div class="card-url">seo.bluecatbot.com</div>
+  </a>
+  zh: seoaudit: '在线网站 SEO 缺失分析 — 粘贴网址秒查标题/描述/Open Graph/hreflang/robots/sitemap/favicon 等检查项，逐项给出问题与可粘贴的修复片段',
+  en: seoaudit: 'Online website SEO gap analysis — paste a URL to instantly check title, description, Open Graph, hreflang, robots.txt, sitemap, favicon and more, with paste-ready fixes for each issue',
+  ja: seoaudit: 'オンライン SEO 体検 — URL を貼るだけでタイトル/説明/Open Graph/hreflang/robots/sitemap/favicon などを即チェックし、問題ごとに貼り付け可能な修正スニペットを提示',
+-->

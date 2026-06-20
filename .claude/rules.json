@@ -1,0 +1,18 @@
+{
+  "project": "mole-desktop",
+  "_doc": "硬规则的确定性拦截。由 .claude/hooks/project-guard.py 评估（claude-flow 播的基线，按需增删）。",
+  "rules": [
+    {
+      "id": "no-exfil-secrets",
+      "on": "bash",
+      "match": "(?i)\\bscp\\b[^\\n]*?(?:^|\\s)(?<!-i\\s)\\S*(\\.env\\b|\\.db\\b|secret\\.key|\\.pem\\b)",
+      "message": "禁止把 .env/*.db/secret.key/*.pem scp 外泄（-i 身份参数除外）。"
+    },
+    {
+      "id": "no-commit-config",
+      "on": "bash",
+      "match": "(?i)\\bgit\\s+add\\b[^\\n]*(\\.env\\b|config\\.json)",
+      "message": ".env/config.json 含凭据，禁止入库。"
+    }
+  ]
+}

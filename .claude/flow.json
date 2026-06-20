@@ -1,0 +1,23 @@
+{
+  "project": "mole-desktop",
+  "profile": "generic",
+  "skills": [
+    "bluecat-deploy",
+    "code-craft",
+    "context-handoff",
+    "debug-backend",
+    "dev-commons",
+    "jianji",
+    "review",
+    "sql",
+    "test"
+  ],
+  "hooks": [
+    "project-guard",
+    "no-claude-commit"
+  ],
+  "mcp": [],
+  "memory": [
+    "mole-desktop-*"
+  ]
+}
