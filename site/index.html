@@ -4,8 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mole — Windows 一体化清理与维护工具</title>
-<meta name="description" content="Mole 是一款 Windows 一体化系统维护桌面应用：深度清理、项目产物清理、实时监控、磁盘浏览、系统优化、应用卸载，六合一。下载安装即用，无需任何依赖。">
+<meta name="description" content="Mole 是一款 Windows 一体化系统维护桌面应用：深度清理、项目产物清理、实时监控、磁盘浏览、系统优化、应用卸载，六合一。下载安装即用，无需任何依赖。中 / 日 / 英三语界面。">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<!-- ===== SEO ===== -->
+<meta name="keywords" content="Mole,Windows 清理,系统维护,深度清理,磁盘空间,系统监控,应用卸载,node_modules 清理,Windows cleaner,PC maintenance,ディスククリーンアップ">
+<meta name="author" content="BlueCatBot">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://mole.bluecatbot.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mole.bluecatbot.com/">
+<meta property="og:site_name" content="Mole">
+<meta property="og:title" content="Mole — Windows 一体化清理与维护工具">
+<meta property="og:description" content="深度清理、项目产物清理、实时监控、磁盘浏览、系统优化、应用卸载，六合一桌面应用，下载即用、无依赖、中/日/英三语。">
+<meta property="og:image" content="https://mole.bluecatbot.com/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:locale:alternate" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mole — Windows 一体化清理与维护工具">
+<meta name="twitter:description" content="六合一 Windows 维护桌面应用，下载即用、无依赖、中/日/英三语。">
+<meta name="twitter:image" content="https://mole.bluecatbot.com/og-cover.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mole","operatingSystem":"Windows 10, Windows 11","applicationCategory":"UtilitiesApplication","url":"https://mole.bluecatbot.com/","description":"Windows 一体化系统维护桌面应用：深度清理、项目产物清理、实时监控、磁盘浏览、系统优化、应用卸载，六合一。下载即用、无依赖、中/日/英三语。","inLanguage":["zh","ja","en"],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"BlueCatBot"}}
+</script>
 <style>
 :root{
   --bg:#0d1117;--bg2:#161b22;--card:#1b222c;--border:#2a323d;--bd2:#232b35;
@@ -32,6 +55,10 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .logo .mk{width:30px;height:30px;border-radius:8px;background:var(--bg);border:2px solid var(--acc);display:grid;place-items:center;color:var(--acc);font-family:var(--mono);font-weight:800}
 .navlinks{display:flex;align-items:center;gap:22px;font-size:14px;color:var(--dim)}
 .navlinks a:hover{color:var(--tx)}
+.lang-switch{display:flex;gap:5px}
+.lang-btn{background:transparent;border:1px solid var(--border);color:var(--dim);padding:4px 9px;border-radius:7px;cursor:pointer;font-size:12.5px;font-family:inherit;transition:.15s}
+.lang-btn:hover{border-color:var(--acc);color:var(--acc)}
+.lang-btn.active{background:var(--acc);color:#1b1300;border-color:var(--acc)}
 .btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:9px;padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer;transition:.15s}
 .btn-primary{background:var(--acc);color:#1b1300}
 .btn-primary:hover{background:#ffa657;transform:translateY(-1px)}
@@ -125,74 +152,79 @@ footer a{color:var(--dim)}footer a:hover{color:var(--acc)}
 <nav><div class="wrap">
   <a class="logo" href="#"><span class="mk">M</span> Mole</a>
   <div class="navlinks">
-    <a href="#modules">功能</a>
-    <a href="#why">优势</a>
+    <a href="#modules" data-i18n="navFeatures">功能</a>
+    <a href="#why" data-i18n="navWhy">优势</a>
     <a href="https://github.com/shushuitie2017/mole-desktop" target="_blank">GitHub</a>
-    <a class="btn btn-primary dlbtn" href="#download">下载</a>
+    <span class="lang-switch">
+      <button class="lang-btn" data-lang="zh">中</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="ja">日</button>
+    </span>
+    <a class="btn btn-primary dlbtn" href="#download" data-i18n="navDownload">下载</a>
   </div>
 </div></nav>
 
 <!-- HERO -->
 <section class="hero"><div class="wrap">
-  <span class="pill">Windows 10 / 11 · 一体化系统维护</span>
-  <h1>一个 Mole，<span class="grad">六合一</span><br>清理 · 监控 · 优化你的 Windows</h1>
-  <p class="sub">CCleaner、WinDirStat、IObit Uninstaller、任务管理器——四个工具的活，一个 Mole 全包。下载安装即用，<b style="color:var(--tx)">无需安装任何依赖环境</b>。</p>
+  <span class="pill" data-i18n="heroPill">Windows 10 / 11 · 一体化系统维护</span>
+  <h1 data-i18n-html="heroH1">一个 Mole，<span class="grad">六合一</span><br>清理 · 监控 · 优化你的 Windows</h1>
+  <p class="sub" data-i18n-html="heroSub">CCleaner、WinDirStat、IObit Uninstaller、任务管理器——四个工具的活，一个 Mole 全包。下载安装即用，<b style="color:var(--tx)">无需安装任何依赖环境</b>。</p>
   <div class="cta">
-    <a class="btn btn-primary lg" href="#download">⬇ 免费下载 Windows 版</a>
-    <a class="btn btn-ghost lg" href="https://github.com/shushuitie2017/mole-desktop" target="_blank">★ GitHub 开源</a>
+    <a class="btn btn-primary lg" href="#download" data-i18n="heroDl">⬇ 免费下载 Windows 版</a>
+    <a class="btn btn-ghost lg" href="https://github.com/shushuitie2017/mole-desktop" target="_blank" data-i18n="heroGh">★ GitHub 开源</a>
   </div>
-  <div class="cta" style="margin-top:14px"><span class="meta">v1.0.3 · 94 MB · Windows 10/11 64 位 · 免费开源</span></div>
-  <a class="hero-shot" href="#download"><img src="assets/shot-clean.png" alt="Mole 深度清理界面"></a>
+  <div class="cta" style="margin-top:14px"><span class="meta" data-i18n="heroMeta">v1.0.3 · 94 MB · Windows 10/11 64 位 · 免费开源</span></div>
+  <a class="hero-shot" href="#download"><img src="assets/shot-clean.png" alt="Mole 深度清理界面 / deep clean"></a>
 </div></section>
 
 <div class="wrap">
   <!-- STATS -->
   <div class="stats">
-    <div class="s"><div class="v">6 合 1</div><div class="l">清理·产物·监控·磁盘·优化·卸载</div></div>
-    <div class="s"><div class="v">0 依赖</div><div class="l">下载安装即用，无需 Python</div></div>
-    <div class="s"><div class="v">12.9 GB</div><div class="l">单机实测可回收缓存</div></div>
-    <div class="s"><div class="v">3 语言</div><div class="l">中文 / English / 日本語</div></div>
+    <div class="s"><div class="v" data-i18n="stat1v">6 合 1</div><div class="l" data-i18n="stat1l">清理·产物·监控·磁盘·优化·卸载</div></div>
+    <div class="s"><div class="v" data-i18n="stat2v">0 依赖</div><div class="l" data-i18n="stat2l">下载安装即用，无需 Python</div></div>
+    <div class="s"><div class="v">12.9 GB</div><div class="l" data-i18n="stat3l">单机实测可回收缓存</div></div>
+    <div class="s"><div class="v" data-i18n="stat4v">3 语言</div><div class="l">中文 / English / 日本語</div></div>
   </div>
 </div>
 
 <!-- MODULES -->
 <section class="block" id="modules"><div class="wrap">
-  <div class="sh"><div class="ey">All-in-one</div><h2>六大功能，一个界面</h2><p>从日常清理到深度维护，覆盖 Windows 维护的方方面面。</p></div>
+  <div class="sh"><div class="ey">All-in-one</div><h2 data-i18n="modsH2">六大功能，一个界面</h2><p data-i18n="modsP">从日常清理到深度维护，覆盖 Windows 维护的方方面面。</p></div>
   <div class="mods">
-    <div class="mod"><div class="ic">🧹</div><h3>深度清理</h3><p>用户/浏览器/GPU/应用/开发者/残留缓存，46 个类别一键扫描回收，删除前可预览。</p><div class="tag">temp · cache · 缩略图 · 崩溃转储</div></div>
-    <div class="mod"><div class="ic">📦</div><h3>项目产物清理</h3><p>一键清理 node_modules / target / dist / .next 等构建产物，按项目分组，开发者实测可回收 20GB+。</p><div class="tag">node · rust · python · java</div></div>
-    <div class="mod"><div class="ic">📊</div><h3>实时系统监控</h3><p>CPU 逐核、内存、磁盘、网络速率、Top 进程，附健康评分，2 秒刷新。</p><div class="tag">CPU · RAM · Disk · Net</div></div>
-    <div class="mod"><div class="ic">🗂️</div><h3>磁盘空间浏览</h3><p>目录逐层钻取，大小条形可视化，快速定位"谁占了我的硬盘"，可直接删除。</p><div class="tag">treemap · 大文件定位</div></div>
-    <div class="mod"><div class="ic">⚡</div><h3>系统优化与修复</h3><p>刷新 DNS、重建图标缓存、重置 Winsock/商店、磁盘健康检查、sfc 修复，按需执行。</p><div class="tag">DNS · 缓存 · 服务修复</div></div>
-    <div class="mod"><div class="ic">🗑️</div><h3>应用卸载</h3><p>列出已装应用（含大小/发行商），过滤系统组件，一键调用原生卸载器彻底清除。</p><div class="tag">注册表 · UWP · 残留</div></div>
+    <div class="mod"><div class="ic">🧹</div><h3 data-i18n="mod1h">深度清理</h3><p data-i18n="mod1p">用户/浏览器/GPU/应用/开发者/残留缓存，46 个类别一键扫描回收，删除前可预览。</p><div class="tag" data-i18n="mod1tag">temp · cache · 缩略图 · 崩溃转储</div></div>
+    <div class="mod"><div class="ic">📦</div><h3 data-i18n="mod2h">项目产物清理</h3><p data-i18n="mod2p">一键清理 node_modules / target / dist / .next 等构建产物，按项目分组，开发者实测可回收 20GB+。</p><div class="tag">node · rust · python · java</div></div>
+    <div class="mod"><div class="ic">📊</div><h3 data-i18n="mod3h">实时系统监控</h3><p data-i18n="mod3p">CPU 逐核、内存、磁盘、网络速率、Top 进程，附健康评分，2 秒刷新。</p><div class="tag">CPU · RAM · Disk · Net</div></div>
+    <div class="mod"><div class="ic">🗂️</div><h3 data-i18n="mod4h">磁盘空间浏览</h3><p data-i18n="mod4p">目录逐层钻取，大小条形可视化，快速定位"谁占了我的硬盘"，可直接删除。</p><div class="tag" data-i18n="mod4tag">treemap · 大文件定位</div></div>
+    <div class="mod"><div class="ic">⚡</div><h3 data-i18n="mod5h">系统优化与修复</h3><p data-i18n="mod5p">刷新 DNS、重建图标缓存、重置 Winsock/商店、磁盘健康检查、sfc 修复，按需执行。</p><div class="tag" data-i18n="mod5tag">DNS · 缓存 · 服务修复</div></div>
+    <div class="mod"><div class="ic">🗑️</div><h3 data-i18n="mod6h">应用卸载</h3><p data-i18n="mod6p">列出已装应用（含大小/发行商），过滤系统组件，一键调用原生卸载器彻底清除。</p><div class="tag" data-i18n="mod6tag">注册表 · UWP · 残留</div></div>
   </div>
 </div></section>
 
 <!-- WHY / ADVANTAGES -->
 <section class="block" id="why"><div class="wrap">
-  <div class="sh"><div class="ey">Why Mole</div><h2>为什么选 Mole</h2><p>不只是又一个清理工具——更安全、更省心、更专业。</p></div>
+  <div class="sh"><div class="ey">Why Mole</div><h2 data-i18n="whyH2">为什么选 Mole</h2><p data-i18n="whyP">不只是又一个清理工具——更安全、更省心、更专业。</p></div>
   <div class="adv">
-    <div class="a"><div class="n">01</div><div><h3>下载即用，零依赖</h3><p>Python 运行时已内置进程序，下载安装包双击即用，无需配置任何环境，普通用户也能轻松上手。</p></div></div>
-    <div class="a"><div class="n">02</div><div><h3>安全护栏，绝不误删</h3><p>内置受保护路径白名单 + 文件年龄阈值，删除前默认"仅预览"，永不触碰 Windows / System32 / 系统关键目录。</p></div></div>
-    <div class="a"><div class="n">03</div><div><h3>开发者友好</h3><p>一键清空堆积的 node_modules、构建产物与 npm/pip/cargo/go 缓存，把几十 GB 硬盘空间还给你。</p></div></div>
-    <div class="a"><div class="n">04</div><div><h3>专业级实时监控</h3><p>不止清理——CPU 逐核负载、内存/磁盘/网络、进程占用、系统健康评分一屏掌握。</p></div></div>
-    <div class="a"><div class="n">05</div><div><h3>三语界面 · 暗色专业 UI</h3><p>中文 / English / 日本語 一键切换，trading-terminal 暗色设计，长时间使用不刺眼。</p></div></div>
-    <div class="a"><div class="n">06</div><div><h3>开源 · 自动更新</h3><p>代码开源可审计，启动管理员权限解锁全功能，内置自动更新，永远用上最新版本。</p></div></div>
+    <div class="a"><div class="n">01</div><div><h3 data-i18n="adv1h">下载即用，零依赖</h3><p data-i18n="adv1p">Python 运行时已内置进程序，下载安装包双击即用，无需配置任何环境，普通用户也能轻松上手。</p></div></div>
+    <div class="a"><div class="n">02</div><div><h3 data-i18n="adv2h">安全护栏，绝不误删</h3><p data-i18n="adv2p">内置受保护路径白名单 + 文件年龄阈值，删除前默认"仅预览"，永不触碰 Windows / System32 / 系统关键目录。</p></div></div>
+    <div class="a"><div class="n">03</div><div><h3 data-i18n="adv3h">开发者友好</h3><p data-i18n="adv3p">一键清空堆积的 node_modules、构建产物与 npm/pip/cargo/go 缓存，把几十 GB 硬盘空间还给你。</p></div></div>
+    <div class="a"><div class="n">04</div><div><h3 data-i18n="adv4h">专业级实时监控</h3><p data-i18n="adv4p">不止清理——CPU 逐核负载、内存/磁盘/网络、进程占用、系统健康评分一屏掌握。</p></div></div>
+    <div class="a"><div class="n">05</div><div><h3 data-i18n="adv5h">三语界面 · 暗色专业 UI</h3><p data-i18n="adv5p">中文 / English / 日本語 一键切换，trading-terminal 暗色设计，长时间使用不刺眼。</p></div></div>
+    <div class="a"><div class="n">06</div><div><h3 data-i18n="adv6h">开源 · 自动更新</h3><p data-i18n="adv6p">代码开源可审计，启动管理员权限解锁全功能，内置自动更新，永远用上最新版本。</p></div></div>
   </div>
 </div></section>
 
 <!-- SHOWCASE -->
 <section class="block"><div class="wrap">
   <div class="showcase">
-    <img src="assets/shot-status.png" alt="Mole 实时系统监控仪表盘">
+    <img src="assets/shot-status.png" alt="Mole 实时系统监控 / real-time monitor">
     <div>
-      <h2>一屏看懂电脑状态</h2>
+      <h2 data-i18n="scH2">一屏看懂电脑状态</h2>
       <ul>
-        <li><b>健康评分</b>：综合 CPU/内存/磁盘/温度给出 0–100 分</li>
-        <li><b>逐核 CPU</b>：每个核心负载实时可视化</li>
-        <li><b>内存 / 磁盘 / 网络</b>：用量、读写、上下行速率</li>
-        <li><b>Top 进程</b>：揪出谁在吃 CPU 和内存</li>
-        <li><b>2 秒刷新</b>：真正的实时，不是快照</li>
+        <li data-i18n-html="sc1"><b>健康评分</b>：综合 CPU/内存/磁盘/温度给出 0–100 分</li>
+        <li data-i18n-html="sc2"><b>逐核 CPU</b>：每个核心负载实时可视化</li>
+        <li data-i18n-html="sc3"><b>内存 / 磁盘 / 网络</b>：用量、读写、上下行速率</li>
+        <li data-i18n-html="sc4"><b>Top 进程</b>：揪出谁在吃 CPU 和内存</li>
+        <li data-i18n-html="sc5"><b>2 秒刷新</b>：真正的实时，不是快照</li>
       </ul>
     </div>
   </div>
@@ -203,8 +235,8 @@ footer a{color:var(--dim)}footer a:hover{color:var(--acc)}
   <div class="safety">
     <div class="big">🛡️</div>
     <div>
-      <h3>安全是第一原则</h3>
-      <p>每一次删除都经过<b style="color:var(--tx)">受保护路径校验</b>与<b style="color:var(--tx)">年龄阈值过滤</b>，系统目录（Windows、System32、Program Files、Defender）永远在白名单之外。所有破坏性操作默认<b style="color:var(--tx)">"仅预览"</b>，你看清要删什么、能回收多少，确认后才真正执行。</p>
+      <h3 data-i18n="safH3">安全是第一原则</h3>
+      <p data-i18n-html="safP">每一次删除都经过<b style="color:var(--tx)">受保护路径校验</b>与<b style="color:var(--tx)">年龄阈值过滤</b>，系统目录（Windows、System32、Program Files、Defender）永远在白名单之外。所有破坏性操作默认<b style="color:var(--tx)">"仅预览"</b>，你看清要删什么、能回收多少，确认后才真正执行。</p>
     </div>
   </div>
 </div></section>
@@ -212,28 +244,173 @@ footer a{color:var(--dim)}footer a:hover{color:var(--acc)}
 <!-- DOWNLOAD -->
 <section class="block" id="download"><div class="wrap">
   <div class="dl">
-    <h2>立即下载 Mole</h2>
-    <p>免费 · 开源 · 适用于 Windows 10 / 11（64 位）</p>
-    <a class="btn btn-primary lg" href="/downloads/Mole-Setup-1.0.3.exe">⬇ 下载 Mole Setup v1.0.3（94 MB）</a>
+    <h2 data-i18n="dlH2">立即下载 Mole</h2>
+    <p data-i18n="dlP">免费 · 开源 · 适用于 Windows 10 / 11（64 位）</p>
+    <a class="btn btn-primary lg" href="/downloads/Mole-Setup-1.0.3.exe" data-i18n="dlBtn">⬇ 下载 Mole Setup v1.0.3（94 MB）</a>
     <div class="dlmeta">
-      <span><b>版本</b> v1.0.3</span>
-      <span><b>大小</b> 94 MB</span>
-      <span><b>系统</b> Windows 10/11 x64</span>
-      <span><b>授权</b> MIT 开源</span>
-      <span><a href="https://github.com/shushuitie2017/mole-desktop" target="_blank" style="color:var(--acc)">GitHub 源码 ↗</a></span>
+      <span data-i18n-html="dlm1"><b>版本</b> v1.0.3</span>
+      <span data-i18n-html="dlm2"><b>大小</b> 94 MB</span>
+      <span data-i18n-html="dlm3"><b>系统</b> Windows 10/11 x64</span>
+      <span data-i18n-html="dlm4"><b>授权</b> MIT 开源</span>
+      <span><a href="https://github.com/shushuitie2017/mole-desktop" target="_blank" style="color:var(--acc)" data-i18n="dlmGit">GitHub 源码 ↗</a></span>
     </div>
     <div class="steps">
-      <div class="st"><div class="num">STEP 1</div><h4>下载并安装</h4><p>双击安装包，可自选安装目录，一路下一步。</p></div>
-      <div class="st"><div class="num">STEP 2</div><h4>授权管理员</h4><p>首次启动点击 UAC「是」，解锁全部维护功能。</p></div>
-      <div class="st"><div class="num">STEP 3</div><h4>开始清理</h4><p>先扫描预览可回收空间，确认后一键清理。</p></div>
+      <div class="st"><div class="num">STEP 1</div><h4 data-i18n="step1h">下载并安装</h4><p data-i18n="step1p">双击安装包，可自选安装目录，一路下一步。</p></div>
+      <div class="st"><div class="num">STEP 2</div><h4 data-i18n="step2h">授权管理员</h4><p data-i18n="step2p">首次启动点击 UAC「是」，解锁全部维护功能。</p></div>
+      <div class="st"><div class="num">STEP 3</div><h4 data-i18n="step3h">开始清理</h4><p data-i18n="step3p">先扫描预览可回收空间，确认后一键清理。</p></div>
     </div>
   </div>
 </div></section>
 
 <footer><div class="wrap">
-  <span>© 2026 Mole · Windows 一体化维护工具 · MIT License</span>
-  <span><a href="https://github.com/shushuitie2017/mole-desktop" target="_blank">GitHub</a> &nbsp;·&nbsp; <a href="#download">下载</a> &nbsp;·&nbsp; mole.bluecatbot.com</span>
+  <span data-i18n="footL">© 2026 Mole · Windows 一体化维护工具 · MIT License</span>
+  <span><a href="https://github.com/shushuitie2017/mole-desktop" target="_blank">GitHub</a> &nbsp;·&nbsp; <a href="#download" data-i18n="navDownload">下载</a> &nbsp;·&nbsp; mole.bluecatbot.com</span>
 </div></footer>
+
+<script>
+const I18N = {
+  zh: {
+    pageTitle: "Mole — Windows 一体化清理与维护工具",
+    navFeatures: "功能", navWhy: "优势", navDownload: "下载",
+    heroPill: "Windows 10 / 11 · 一体化系统维护",
+    heroH1: `一个 Mole，<span class="grad">六合一</span><br>清理 · 监控 · 优化你的 Windows`,
+    heroSub: `CCleaner、WinDirStat、IObit Uninstaller、任务管理器——四个工具的活，一个 Mole 全包。下载安装即用，<b style="color:var(--tx)">无需安装任何依赖环境</b>。`,
+    heroDl: "⬇ 免费下载 Windows 版", heroGh: "★ GitHub 开源",
+    heroMeta: "v1.0.3 · 94 MB · Windows 10/11 64 位 · 免费开源",
+    stat1v: "6 合 1", stat1l: "清理·产物·监控·磁盘·优化·卸载",
+    stat2v: "0 依赖", stat2l: "下载安装即用，无需 Python",
+    stat3l: "单机实测可回收缓存", stat4v: "3 语言",
+    modsH2: "六大功能，一个界面", modsP: "从日常清理到深度维护，覆盖 Windows 维护的方方面面。",
+    mod1h: "深度清理", mod1p: "用户/浏览器/GPU/应用/开发者/残留缓存，46 个类别一键扫描回收，删除前可预览。", mod1tag: "temp · cache · 缩略图 · 崩溃转储",
+    mod2h: "项目产物清理", mod2p: "一键清理 node_modules / target / dist / .next 等构建产物，按项目分组，开发者实测可回收 20GB+。",
+    mod3h: "实时系统监控", mod3p: "CPU 逐核、内存、磁盘、网络速率、Top 进程，附健康评分，2 秒刷新。",
+    mod4h: "磁盘空间浏览", mod4p: `目录逐层钻取，大小条形可视化，快速定位"谁占了我的硬盘"，可直接删除。`, mod4tag: "treemap · 大文件定位",
+    mod5h: "系统优化与修复", mod5p: "刷新 DNS、重建图标缓存、重置 Winsock/商店、磁盘健康检查、sfc 修复，按需执行。", mod5tag: "DNS · 缓存 · 服务修复",
+    mod6h: "应用卸载", mod6p: "列出已装应用（含大小/发行商），过滤系统组件，一键调用原生卸载器彻底清除。", mod6tag: "注册表 · UWP · 残留",
+    whyH2: "为什么选 Mole", whyP: "不只是又一个清理工具——更安全、更省心、更专业。",
+    adv1h: "下载即用，零依赖", adv1p: "Python 运行时已内置进程序，下载安装包双击即用，无需配置任何环境，普通用户也能轻松上手。",
+    adv2h: "安全护栏，绝不误删", adv2p: `内置受保护路径白名单 + 文件年龄阈值，删除前默认"仅预览"，永不触碰 Windows / System32 / 系统关键目录。`,
+    adv3h: "开发者友好", adv3p: "一键清空堆积的 node_modules、构建产物与 npm/pip/cargo/go 缓存，把几十 GB 硬盘空间还给你。",
+    adv4h: "专业级实时监控", adv4p: "不止清理——CPU 逐核负载、内存/磁盘/网络、进程占用、系统健康评分一屏掌握。",
+    adv5h: "三语界面 · 暗色专业 UI", adv5p: "中文 / English / 日本語 一键切换，trading-terminal 暗色设计，长时间使用不刺眼。",
+    adv6h: "开源 · 自动更新", adv6p: "代码开源可审计，启动管理员权限解锁全功能，内置自动更新，永远用上最新版本。",
+    scH2: "一屏看懂电脑状态",
+    sc1: "<b>健康评分</b>：综合 CPU/内存/磁盘/温度给出 0–100 分",
+    sc2: "<b>逐核 CPU</b>：每个核心负载实时可视化",
+    sc3: "<b>内存 / 磁盘 / 网络</b>：用量、读写、上下行速率",
+    sc4: "<b>Top 进程</b>：揪出谁在吃 CPU 和内存",
+    sc5: "<b>2 秒刷新</b>：真正的实时，不是快照",
+    safH3: "安全是第一原则",
+    safP: `每一次删除都经过<b style="color:var(--tx)">受保护路径校验</b>与<b style="color:var(--tx)">年龄阈值过滤</b>，系统目录（Windows、System32、Program Files、Defender）永远在白名单之外。所有破坏性操作默认<b style="color:var(--tx)">"仅预览"</b>，你看清要删什么、能回收多少，确认后才真正执行。`,
+    dlH2: "立即下载 Mole", dlP: "免费 · 开源 · 适用于 Windows 10 / 11（64 位）",
+    dlBtn: "⬇ 下载 Mole Setup v1.0.3（94 MB）",
+    dlm1: "<b>版本</b> v1.0.3", dlm2: "<b>大小</b> 94 MB", dlm3: "<b>系统</b> Windows 10/11 x64", dlm4: "<b>授权</b> MIT 开源", dlmGit: "GitHub 源码 ↗",
+    step1h: "下载并安装", step1p: "双击安装包，可自选安装目录，一路下一步。",
+    step2h: "授权管理员", step2p: "首次启动点击 UAC「是」，解锁全部维护功能。",
+    step3h: "开始清理", step3p: "先扫描预览可回收空间，确认后一键清理。",
+    footL: "© 2026 Mole · Windows 一体化维护工具 · MIT License",
+  },
+  en: {
+    pageTitle: "Mole — All-in-one Windows cleanup & maintenance",
+    navFeatures: "Features", navWhy: "Why", navDownload: "Download",
+    heroPill: "Windows 10 / 11 · All-in-one maintenance",
+    heroH1: `One Mole, <span class="grad">six in one</span><br>Clean · Monitor · Optimize your Windows`,
+    heroSub: `CCleaner, WinDirStat, IObit Uninstaller, Task Manager — the work of four tools, all in one Mole. Install and run, <b style="color:var(--tx)">no dependencies required</b>.`,
+    heroDl: "⬇ Free Download for Windows", heroGh: "★ Open Source on GitHub",
+    heroMeta: "v1.0.3 · 94 MB · Windows 10/11 64-bit · Free & Open Source",
+    stat1v: "6-in-1", stat1l: "Clean·Build·Monitor·Disk·Optimize·Uninstall",
+    stat2v: "0 deps", stat2l: "Install & run, no Python needed",
+    stat3l: "Cache reclaimed in one test run", stat4v: "3 languages",
+    modsH2: "Six features, one interface", modsP: "From daily cleanup to deep maintenance — covering every aspect of Windows upkeep.",
+    mod1h: "Deep Clean", mod1p: "User/browser/GPU/app/developer/leftover caches — 46 categories scanned and reclaimed in one click, with preview before deletion.", mod1tag: "temp · cache · thumbnails · crash dumps",
+    mod2h: "Build Artifact Cleanup", mod2p: "One-click cleanup of node_modules / target / dist / .next build artifacts, grouped by project — 20GB+ reclaimed in real-world tests.",
+    mod3h: "Real-time Monitoring", mod3p: "Per-core CPU, memory, disk, network rates and top processes with a health score, refreshed every 2 seconds.",
+    mod4h: "Disk Space Explorer", mod4p: `Drill into folders level by level with size-bar visualization to find "what's eating my disk", and delete right there.`, mod4tag: "treemap · large-file finder",
+    mod5h: "System Optimize & Repair", mod5p: "Flush DNS, rebuild icon cache, reset Winsock/Store, check disk health, run sfc repair — on demand.", mod5tag: "DNS · cache · service repair",
+    mod6h: "App Uninstaller", mod6p: "Lists installed apps (with size/publisher), filters system components, and invokes the native uninstaller for a clean removal.", mod6tag: "registry · UWP · leftovers",
+    whyH2: "Why choose Mole", whyP: "Not just another cleaner — safer, more effortless, more professional.",
+    adv1h: "Run on download, zero deps", adv1p: "The Python runtime is bundled in — just download, double-click and go, with no environment setup. Easy even for non-technical users.",
+    adv2h: "Safety rails, never deletes by mistake", adv2p: `Built-in protected-path whitelist + file-age threshold; "preview only" by default before deletion, and never touches Windows / System32 / critical system folders.`,
+    adv3h: "Developer-friendly", adv3p: "Wipe piled-up node_modules, build artifacts and npm/pip/cargo/go caches in one click — reclaim tens of GB.",
+    adv4h: "Pro-grade real-time monitoring", adv4p: "More than cleanup — per-core CPU load, memory/disk/network, process usage and a system health score, all on one screen.",
+    adv5h: "Trilingual UI · dark pro design", adv5p: "Switch between 中文 / English / 日本語 in one click, with a trading-terminal dark design that's easy on the eyes for long sessions.",
+    adv6h: "Open source · auto-update", adv6p: "Auditable open-source code; run as admin to unlock all features, with built-in auto-update so you're always on the latest.",
+    scH2: "Your PC's status at a glance",
+    sc1: "<b>Health score</b>: a 0–100 rating from CPU/memory/disk/temperature",
+    sc2: "<b>Per-core CPU</b>: real-time load visualization for every core",
+    sc3: "<b>Memory / Disk / Network</b>: usage, read/write and up/down rates",
+    sc4: "<b>Top processes</b>: find what's eating CPU and memory",
+    sc5: "<b>2-second refresh</b>: truly real-time, not a snapshot",
+    safH3: "Safety first",
+    safP: `Every deletion passes <b style="color:var(--tx)">protected-path checks</b> and <b style="color:var(--tx)">age-threshold filtering</b>; system folders (Windows, System32, Program Files, Defender) are always off-limits. All destructive actions default to <b style="color:var(--tx)">"preview only"</b> — you see exactly what will be deleted and how much you'll reclaim before anything actually happens.`,
+    dlH2: "Download Mole now", dlP: "Free · Open source · for Windows 10 / 11 (64-bit)",
+    dlBtn: "⬇ Download Mole Setup v1.0.3 (94 MB)",
+    dlm1: "<b>Version</b> v1.0.3", dlm2: "<b>Size</b> 94 MB", dlm3: "<b>OS</b> Windows 10/11 x64", dlm4: "<b>License</b> MIT", dlmGit: "GitHub source ↗",
+    step1h: "Download & install", step1p: "Double-click the installer, choose a folder, and click through.",
+    step2h: "Grant admin", step2p: `Click "Yes" on the UAC prompt at first launch to unlock all features.`,
+    step3h: "Start cleaning", step3p: "Scan to preview reclaimable space, then clean in one click.",
+    footL: "© 2026 Mole · All-in-one Windows maintenance · MIT License",
+  },
+  ja: {
+    pageTitle: "Mole — Windows オールインワン クリーンアップ＆保守ツール",
+    navFeatures: "機能", navWhy: "特長", navDownload: "ダウンロード",
+    heroPill: "Windows 10 / 11 · オールインワン保守",
+    heroH1: `一つの Mole で<span class="grad">6 機能</span><br>Windows をクリーン・監視・最適化`,
+    heroSub: `CCleaner・WinDirStat・IObit Uninstaller・タスクマネージャー——4 つのツールの仕事を Mole 一つで。インストールしてすぐ使え、<b style="color:var(--tx)">依存環境は一切不要</b>。`,
+    heroDl: "⬇ Windows 版を無料ダウンロード", heroGh: "★ GitHub でオープンソース",
+    heroMeta: "v1.0.3 · 94 MB · Windows 10/11 64bit · 無料・オープンソース",
+    stat1v: "6 in 1", stat1l: "クリーン·成果物·監視·ディスク·最適化·削除",
+    stat2v: "依存 0", stat2l: "インストールしてすぐ、Python 不要",
+    stat3l: "実機テストで回収できたキャッシュ", stat4v: "3 言語",
+    modsH2: "6 つの機能を一つの画面に", modsP: "日常のクリーンアップから本格的な保守まで、Windows メンテナンスのあらゆる側面をカバー。",
+    mod1h: "ディープクリーン", mod1p: "ユーザー/ブラウザ/GPU/アプリ/開発者/残留キャッシュなど 46 カテゴリをワンクリックでスキャン・回収、削除前にプレビュー可能。", mod1tag: "temp · cache · サムネイル · クラッシュダンプ",
+    mod2h: "ビルド成果物のクリーンアップ", mod2p: "node_modules / target / dist / .next などのビルド成果物をワンクリックで削除、プロジェクト別にグループ化、実測で 20GB 以上回収。",
+    mod3h: "リアルタイム監視", mod3p: "コアごとの CPU、メモリ、ディスク、ネットワーク速度、トップ プロセスを健全性スコア付きで 2 秒ごとに更新。",
+    mod4h: "ディスク使用量ブラウザ", mod4p: "フォルダを階層ごとにドリルダウン、サイズバーで可視化し「何がディスクを占有しているか」を素早く特定、その場で削除可能。", mod4tag: "ツリーマップ · 大容量ファイル検出",
+    mod5h: "システム最適化・修復", mod5p: "DNS のフラッシュ、アイコンキャッシュ再構築、Winsock/ストアのリセット、ディスク健全性チェック、sfc 修復を必要に応じて実行。", mod5tag: "DNS · キャッシュ · サービス修復",
+    mod6h: "アプリのアンインストール", mod6p: "インストール済みアプリ（サイズ/発行元付き）を一覧表示、システムコンポーネントを除外し、ネイティブのアンインストーラーをワンクリックで起動して完全削除。", mod6tag: "レジストリ · UWP · 残留",
+    whyH2: "なぜ Mole なのか", whyP: "ただのクリーナーではない——より安全、より手軽、よりプロフェッショナル。",
+    adv1h: "DL してすぐ、依存ゼロ", adv1p: "Python ランタイムを同梱、インストーラーをダブルクリックするだけ、環境構築は不要。一般ユーザーでも簡単。",
+    adv2h: "セーフガードで誤削除なし", adv2p: "保護パスのホワイトリストとファイル経過日数のしきい値を内蔵、削除前は既定で「プレビューのみ」、Windows / System32 / 重要なシステムフォルダには一切触れません。",
+    adv3h: "開発者にやさしい", adv3p: "溜まった node_modules、ビルド成果物、npm/pip/cargo/go キャッシュをワンクリックで一掃、数十 GB を取り戻す。",
+    adv4h: "プロ級のリアルタイム監視", adv4p: "クリーンアップだけでなく、コアごとの CPU 負荷、メモリ/ディスク/ネットワーク、プロセス使用率、システム健全性スコアを 1 画面で把握。",
+    adv5h: "3 言語 UI · ダークなプロ仕様", adv5p: "中文 / English / 日本語 をワンクリックで切替、トレーディングターミナル風のダークデザインで長時間でも目に優しい。",
+    adv6h: "オープンソース · 自動更新", adv6p: "監査可能なオープンソース、管理者権限で全機能を解放、自動更新を内蔵し常に最新版。",
+    scH2: "PC の状態を一目で",
+    sc1: "<b>健全性スコア</b>：CPU/メモリ/ディスク/温度から 0–100 で評価",
+    sc2: "<b>コア別 CPU</b>：各コアの負荷をリアルタイム可視化",
+    sc3: "<b>メモリ / ディスク / ネットワーク</b>：使用量・読み書き・上り下り速度",
+    sc4: "<b>トップ プロセス</b>：CPU とメモリを消費している犯人を特定",
+    sc5: "<b>2 秒更新</b>：スナップショットではない本当のリアルタイム",
+    safH3: "安全第一",
+    safP: `すべての削除は<b style="color:var(--tx)">保護パス検証</b>と<b style="color:var(--tx)">経過日数フィルタ</b>を通過、システムフォルダ（Windows、System32、Program Files、Defender）は常に対象外。破壊的な操作は既定で<b style="color:var(--tx)">「プレビューのみ」</b>、何を削除し、どれだけ回収できるかを確認してから実行します。`,
+    dlH2: "今すぐ Mole をダウンロード", dlP: "無料 · オープンソース · Windows 10 / 11（64bit）対応",
+    dlBtn: "⬇ Mole Setup v1.0.3 をダウンロード（94 MB）",
+    dlm1: "<b>バージョン</b> v1.0.3", dlm2: "<b>サイズ</b> 94 MB", dlm3: "<b>OS</b> Windows 10/11 x64", dlm4: "<b>ライセンス</b> MIT", dlmGit: "GitHub ソース ↗",
+    step1h: "ダウンロードしてインストール", step1p: "インストーラーをダブルクリック、フォルダを選んで進めるだけ。",
+    step2h: "管理者権限を付与", step2p: "初回起動時に UAC で「はい」をクリックして全機能を解放。",
+    step3h: "クリーンアップ開始", step3p: "スキャンで回収可能な容量をプレビューし、確認後ワンクリックで清掃。",
+    footL: "© 2026 Mole · Windows オールインワン保守 · MIT License",
+  }
+};
+function setLang(l){
+  if(!I18N[l]) l = "zh";
+  localStorage.setItem("mole_lang", l);
+  document.documentElement.lang = l;
+  const t = I18N[l];
+  document.querySelectorAll("[data-i18n]").forEach(e=>{ const v=t[e.dataset.i18n]; if(v!=null) e.textContent=v; });
+  document.querySelectorAll("[data-i18n-html]").forEach(e=>{ const v=t[e.dataset.i18nHtml]; if(v!=null) e.innerHTML=v; });
+  if(t.pageTitle) document.title = t.pageTitle;
+  document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active", b.dataset.lang===l));
+}
+document.querySelectorAll(".lang-btn").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.lang)));
+(function(){
+  const saved = localStorage.getItem("mole_lang");
+  const nav = (navigator.language||"zh").toLowerCase();
+  const def = nav.startsWith("ja") ? "ja" : nav.startsWith("zh") ? "zh" : "en";
+  setLang(saved || def);
+})();
+</script>
 
 </body>
 </html>
